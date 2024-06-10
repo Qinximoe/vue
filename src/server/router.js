@@ -1,0 +1,18 @@
+let express = require('express')
+let router = express.Router()
+let user = require('./API/user')
+let list = require('./API/list.js')
+
+router.get('/user', user.get)
+router.get('/list/all',list.all)
+router.get('/list/add',list.add)
+router.get('/list/search',list.search)
+router.get('/list/addVisitor',list.addVisitor)
+router.get('/list/repair',list.repair)
+router.get('/list/searchVisitors',list.searchVisitors)
+router.get('/list/searchRepair',list.searchRepair)
+router.get('/list/delRepair',list.delRepair)
+router.get('/list/delVisitor',list.delVisitor)
+router.get('/list/updateRepair',list.updateRepair)
+router.get('/list/updateVisitor',list.updateVisitor)
+module.exports = router
