@@ -11,6 +11,6 @@ app.use(cors())              //配置跨域
 app.use(router)              //配置路由
 
 app.listen(80, () => {
-    console.log('服务器启动成功');
+    console.log('服务器启动成功咯');
 })
 
