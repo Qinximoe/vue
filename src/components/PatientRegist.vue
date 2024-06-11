@@ -3,47 +3,39 @@
   <span style="text-align: center;color: aquamarine;position: relative;left: 460px;font-weight: bold;">病人信息注册</span>
   <div class="main">
     <el-form label-width="120px">
-      <el-form-item label="Activity 病床号">
-      <el-input v-on:blur="checkaccout" v-model="input.accout" />
+      <el-form-item label="患者唯一标识">
+      <el-input v-on:blur="checkaccout" v-model="input.PatientID" />
     </el-form-item>
-    <el-form-item label="Activity 名字">
-      <el-input v-model="input.name" />
+    <el-form-item label="患者姓名">
+      <el-input v-model="input.Name" />
     </el-form-item>
-    <el-form-item label="Activity 楼层">
-      <el-input v-model="input.dorm" />
+    <el-form-item label="患者性别(M/F)">
+      <el-input v-model="input.Gender" />
     </el-form-item>
-    <el-form-item label="Activity 病房号">
-      <el-input v-on:blur="checkroom" v-model="input.room" />
-    </el-form-item>
-
-    <el-form-item label="Activity取药时间">
+    <el-form-item label="出生日期">
       <el-col :span="15">
         <el-date-picker
-          v-model="input.time"
+          v-model="input.BirthDate"
           type="date"
           placeholder="Pick a date"
           style="width: 100%"
         />
       </el-col>
     </el-form-item>
-    <el-form-item label="Activity zone">
-      <el-select v-model="input.department" placeholder="选择病因">
-        <el-option label="发烧" value="发烧" />
-        <el-option label="流行性感冒" value="流行性感冒" />
-        <el-option label="鼻炎" value="鼻炎" />
-      </el-select>
+    <el-form-item label="联系电话">
+      <el-input v-model="input.Phone" />
     </el-form-item>
-    <el-form-item  label="性别">
-      <el-radio-group v-model="input.sex">
-        <el-radio label="男" />
-        <el-radio label="女" />
-      </el-radio-group>
+    <el-form-item label="地址">
+      <el-input v-model="input.Address" />
+    </el-form-item>
+    <el-form-item label="账号">
+      <el-input v-model="input.Account" />
     </el-form-item>
   </el-form>
-  <el-form-item label="Activity 密码">
-      <el-input v-on:blur="checkpasswd" v-model="input.passwd"/>
+  <el-form-item label="密码">
+      <el-input v-on:blur="checkpasswd" v-model="input.Password"/>
   </el-form-item>
-  <el-form-item label="Activity 确认密码">
+  <el-form-item label="确认密码">
       <el-input v-on:blur="checkpasswd" v-model="passwd2"/>
   </el-form-item>
   <div class="login">
@@ -65,7 +57,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import type { Action } from 'element-plus'
 import axios from 'axios';
 const show=()=>{
-  console.log(input.department)
+  console.log(input.Account)
 }
 //提示窗
 const open = (title) => {
@@ -81,29 +73,29 @@ const open = (title) => {
 }
 //学生信息
 const input = reactive({
-    accout:"",
-    name:"",
-    dorm:"",
-    room:"",
-    time:"",
-    department:"",
-    sex:"",
-    passwd:"",
+  PatientID:"",
+  Name:"",
+  Gender:"",
+  BirthDate:"",
+    Phone:"",
+    Address:"",
+    Account:"",
+    Password:"",
     array:[]//查询中接收所有数据
   })
   const passwd2=ref("")
   const formData = reactive([]);
 //重置按钮
   const clear=()=>{
-    input.accout=""
-    input.name=""
-    input.dorm=""
+    input.PatientID=""
+    input.Name=""
+    input.Gender=""
     passwd2.value=""
-    input.time=""
-    input.room=""
-    input.sex=""
-    input.department=""
-    input.passwd=""
+    input.Phone=""
+    input.BirthDate=""
+    input.Address=""
+    input.Account=""
+    input.Password=""
   }
   //查询所有
   const all=()=>{
@@ -121,14 +113,13 @@ const input = reactive({
     axios.get('http://127.0.0.1/list/add',{
 
         params:{
-          accout:input.accout,
-          name:input.name,
-          dorm:input.dorm,
-          room:input.room,
-          time:"2021-09-01",
-          department:input.department,
-          sex:input.sex,
-          passwd:input.passwd
+          PatientID:input.PatientID,
+          Name:input.Name,
+          Gender:input.Gender,
+          BirthDate:input.BirthDate,
+          Address:input.Address,
+          Account:input.Account,
+          Password:input.Password
         }
       }).then(res=>{
 
@@ -142,7 +133,7 @@ const input = reactive({
   }
   //确定按钮
     const yes=()=>{
-      if(input.accout==""||input.name==""||input.dorm==""||input.room==""||input.time==""||input.department==""||input.sex==""||input.passwd==""){
+      if(input.PatientID==""||input.Name==""||input.Gender==""||input.BirthDate==""||input.Phone==""||input.Account==""||input.Address==""||input.Password==""){
         open("不能为空")
       }
       else if(checkaccout()&&checkpasswd()&&checkroom()){
@@ -159,7 +150,7 @@ const input = reactive({
     }
   //学号
   const checkaccout=()=>{
-    const accout=input.accout
+    const accout=input.PatientID
     if(/^[\d]+$/.test(accout)==false){
       open("病床号格式错误：应全为数")
       return 0;
@@ -172,7 +163,7 @@ const input = reactive({
   }
   //宿舍号
   const checkroom=()=>{
-    const room=input.room
+    const room=input.BirthDate
     if(/^[\d]+$/.test(room)==false){
       open("病房号格式错误：应全为数字")
       return 0;
@@ -186,7 +177,7 @@ const input = reactive({
   //密码
   const checkpasswd=()=>{
     const pd=({
-      one:input.passwd,
+      one:input.Password,
       two:passwd2.value
     })
     if(pd.one!=pd.two){

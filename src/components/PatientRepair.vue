@@ -1,19 +1,29 @@
 <template>
-    <span style="text-align: center;color: aquamarine;position: relative;left: 460px;">药品选择</span>
+    <span style="text-align: center;color: aquamarine;position: relative;left: 460px;">处方登记</span>
     <div class="main">
       <el-form label-width="120px">
-        <el-form-item label="Activity 病房号">
-        <el-input v-on:blur="checkaccout()" v-model="input.accout" placeholder="请输入病房号"/>
+        <el-form-item label="处方唯一标识">
+        <el-input v-on:blur="checkaccout()" v-model="input.PrescriptionID" placeholder="请输入处方唯一标识"/>
       </el-form-item>
-      <el-form-item label="Activity 楼层">
-        <el-input v-model="input.room"  placeholder="请输入楼层"/>
+      <el-form-item label="医师唯一标识">
+        <el-input v-model="input.DoctorID"  placeholder="请输入医师唯一标识"/>
       </el-form-item>
-      <el-form-item label="Activity 药品名    ">
-        <el-input  v-model="input.thing" placeholder="请输入药品名"/>
+      <el-form-item label="患者唯一标识">
+        <el-input  v-model="input.PatientID" placeholder="请输入患者唯一标识"/>
       </el-form-item>
     </el-form>
-    <el-form-item label="Activity 用法用量">
-        <el-input v-model="input.reason" placeholder="请输入用法用量" />
+    <el-form-item label="开处方日期">
+      <el-col :span="15">
+        <el-date-picker
+          v-model="input.PrescriptionDate"
+          type="date"
+          placeholder="Pick a date"
+          style="width: 100%"
+        />
+      </el-col>
+    </el-form-item>
+    <el-form-item label="处方状态">
+        <el-input v-model="input.Status" placeholder="请输入处方状态（如：新开，已配制，已完成）" style="width: 350px;"/>
     </el-form-item>
     <div class="login">
       <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -35,10 +45,11 @@
   import axios from 'axios';
   //访客信息
   const input=reactive({
-      accout:"",
-      room:"",
-      thing:"",
-      reason:"",
+      PrescriptionID:"",
+      DoctorID:"",
+      PatientID:"",
+      PrescriptionDate:"",
+      Status:"",
       array:[]//查询中接收所有数据
     })
     const passwd2=ref("")
@@ -46,10 +57,10 @@
   const addRepair=()=>{
     axios.get('http://127.0.0.1/list/repair',{
       params:{
-          id:input.accout,
-          room:input.room,
-          thing:input.thing,
-          reason:input.reason,
+          id:input.PrescriptionID,
+          room:input.DoctorID,
+          thing:input.PatientID,
+          reason:input.PrescriptionDate,
       }
   }).then(res=>{
       console.log(res.data)
@@ -58,7 +69,7 @@
   })
   }
   const primary=()=>{
-    if(input.accout==""||input.room==""||input.thing==""||input.reason==""){
+    if(input.PrescriptionID==""||input.DoctorID==""||input.PatientID==""||input.PrescriptionDate==""||input.Status==""){
           open("不能为空")
         }
         else if(checkaccout()&checkroom()){
@@ -85,14 +96,15 @@
 
   //重置按钮
     const clear=()=>{
-      input.accout=""
-      input.thing=""
-      input.reason=""
-      input.room=""
+      input.PrescriptionID=""
+      input.PatientID=""
+      input.PrescriptionDate=""
+      input.DoctorID=""
+      input.Status=""
     }
       //学号
       const checkaccout=()=>{
-      const accout=input.accout
+      const accout=input.PrescriptionID
       if(/^[\d]+$/.test(accout)==false){
         open("病房号格式错误：应全为数")
         return 0;
@@ -105,7 +117,7 @@
     }
      //宿舍号
   const checkroom=()=>{
-    const room=input.room
+    const room=input.DoctorID
     if(/^[\d]+$/.test(room)==false){
       open("楼层格式错误：应全为数字")
       return 0;
